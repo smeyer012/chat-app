@@ -4,12 +4,13 @@ import Chat from './components/Chat';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-// Create the navigator
+// Creates the navigator
 const Stack = createNativeStackNavigator();
 
 const App = () => {
 
   return (
+    // Sets up multiple screens within which user navigates
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName="Start"

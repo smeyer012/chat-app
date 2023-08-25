@@ -4,6 +4,7 @@ import { Icon } from 'react-native-elements'
 
 const Start = ({ navigation }) => {
 
+    // sets up state elements to be passed to other screens
     const [name, setName] = useState('');
     const [color, setColor] = useState('');
     const [colorHex, setColorHex] = useState('');
@@ -28,6 +29,7 @@ const Start = ({ navigation }) => {
                             </View>
                             <View style={styles.colorPicker}>
                                 <Text style={styles.colorPickerText}>Choose Background Color:</Text>
+                                {/* sets up radio button style elements for color picker */}
                                 <View style={styles.colorPickerContainer}>
                                     <TouchableOpacity onPress={() => { setColor('Black'), setColorHex('#090C08') }} style={color == 'Black' ? styles.colorButtonPress : styles.colorButton}>
                                         <View style={[styles.colorButtonInner, { backgroundColor: '#090C08' }]}></View>
@@ -55,6 +57,7 @@ const Start = ({ navigation }) => {
 
 }
 
+// Styles for start screen
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -64,21 +67,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#D3D3D3'
     },
+    // Contains chat app name
     box1: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    box2: {
-        height: '44%',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    innerbox: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '88%',
-        height: '88%'
     },
     titletext: {
         color: 'white',
@@ -87,6 +80,20 @@ const styles = StyleSheet.create({
         color: '#FFFFFF',
         textAlign: 'center',
     },
+    // Contains chat app intro form
+    box2: {
+        height: '44%',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    // Creates white box within bottom portion of screen
+    innerbox: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '88%',
+        height: '88%'
+    },
+    // Form elements
     inputWrapper: {
         width: '100%',
         flexDirection: 'row',

@@ -3,11 +3,13 @@ import { StyleSheet, View, Text } from 'react-native';
 
 const Screen2 = ({ route, navigation }) => {
 
+    // Accepts state elements as parameters
     const { name } = route.params;
     const { color } = route.params;
     const { colorHex } = route.params;
 
     useEffect(() => {
+        // Controls the text in top title bar
         navigation.setOptions({ title: name + ' (' + color + ' theme)' });
     }, []);
 
