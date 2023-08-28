@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ImageBackground, StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { ImageBackground, StyleSheet, Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
 import { Icon } from 'react-native-elements'
 
 const Start = ({ navigation }) => {
@@ -16,7 +16,7 @@ const Start = ({ navigation }) => {
                     <Text style={styles.titletext}>ChatMeUp</Text>
                 </View>
                 <View style={styles.box2}>
-                    <View style={[styles.innerbox, { backgroundColor: '#FFFFFF' }]}>
+                    <View style={[styles.innerbox, { backgroundColor: '#FFFFFF', minHeight: 280 }]}>
                         <View style={[styles.innerbox, { justifyContent: 'space-between' }]}>
                             <View style={styles.inputWrapper}>
                                 <Icon type="material-community" name="account-outline" style={styles.inputIcon} color='#B0AEB9' />
@@ -52,6 +52,7 @@ const Start = ({ navigation }) => {
                     </View>
                 </View >
             </ImageBackground >
+            <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} />
         </View >
     );
 
