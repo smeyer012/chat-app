@@ -1,8 +1,22 @@
 import { useState } from 'react';
-import { ImageBackground, StyleSheet, Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
+import { ImageBackground, StyleSheet, Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import { Icon } from 'react-native-elements'
+import { getAuth, signInAnonymously } from "firebase/auth";
 
 const Start = ({ navigation }) => {
+
+    const auth = getAuth();
+
+    const signInUser = () => {
+        signInAnonymously(auth)
+            .then(result => {
+                navigation.navigate("Chat", { name: name, userID: result.user.uid, bgColor: color, colorHex: colorHex });
+                Alert.alert("Signed in Successfully!");
+            })
+            .catch((error) => {
+                Alert.alert("Unable to sign in, try later again.");
+            })
+    }
 
     // sets up state elements to be passed to other screens
     const [name, setName] = useState('');
@@ -45,7 +59,7 @@ const Start = ({ navigation }) => {
                                     </TouchableOpacity>
                                 </View>
                             </View>
-                            <TouchableOpacity onPress={() => navigation.navigate('Chat', { name: name, color: color, colorHex: colorHex })} style={[styles.startButton]}>
+                            <TouchableOpacity style={[styles.startButton]} onPress={signInUser}>
                                 <Text style={[styles.startText]}>Start Chatting</Text>
                             </TouchableOpacity>
                         </View>
