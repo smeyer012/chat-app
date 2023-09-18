@@ -4,7 +4,7 @@ import Chat from './components/Chat';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { initializeFirestore } from "firebase/firestore";
 
 // Creates the navigator
 const Stack = createNativeStackNavigator();
@@ -24,7 +24,9 @@ const App = () => {
   const app = initializeApp(firebaseConfig);
 
   // Initialize Cloud Firestore and get a reference to the service
-  const db = getFirestore(app);
+  const db = initializeFirestore(app, {
+    experimentalForceLongPolling: true
+  });
 
   return (
     // Sets up multiple screens within which user navigates
