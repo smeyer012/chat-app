@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, KeyboardAvoidingView, Platform, Alert } from 'react-native';
-import { Bubble, GiftedChat } from "react-native-gifted-chat";
+import { Bubble, GiftedChat, InputToolbar } from "react-native-gifted-chat";
 import { collection, addDoc, onSnapshot, query, where, orderBy } from "firebase/firestore";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const Chat = ({ db, route, navigation }) => {
+const Chat = ({ db, route, navigation, isConnected }) => {
 
     // Accepts state elements as parameters
     const { name } = route.params;
@@ -32,22 +33,50 @@ const Chat = ({ db, route, navigation }) => {
         />
     }
 
+    const renderInputToolbar = (props) => {
+        if (isConnected) return <InputToolbar {...props} />;
+        else return null;
+    }
+
+    let unsubMessagelist;
+
     useEffect(() => {
-        const q = query(collection(db, "messages"), orderBy("createdAt", "desc"))  //setMessages
-        const unsubMessagelist = onSnapshot(q, (documentsSnapshot) => {
-            let newMSG = [];
-            documentsSnapshot.forEach(doc => {
-                newMSG.push({ id: doc.id, ...doc.data(), createdAt: new Date(doc.data().createdAt.toMillis()), user: { name: name } })
+        if (isConnected === true) {
+            if (unsubMessagelist) unsubMessagelist();
+            unsubMessagelist = null;
+            const q = query(collection(db, "messages"), orderBy("createdAt", "desc"))  //setMessages
+            unsubMessagelist = onSnapshot(q, (documentsSnapshot) => {
+                let newMSG = [];
+                documentsSnapshot.forEach(doc => {
+                    newMSG.push({ id: doc.id, ...doc.data(), createdAt: new Date(doc.data().createdAt.toMillis()), user: { name: name } })
+                });
+                cacheMessageList(newMSG);
+                setMessages(newMSG);
             });
-            setMessages(newMSG);
-        });
+        } else {
+            loadCachedList();
+        }
 
         // Clean up code
         return () => {
             if (unsubMessagelist) unsubMessagelist();
         }
 
-    }, []);
+    }, [isConnected]);
+
+    const cacheMessageList = async (listsToCache) => {
+        try {
+            await AsyncStorage.setItem('message_list', JSON.stringify(listsToCache));
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
+    const loadCachedList = async () => {
+        const cachedLists = await AsyncStorage.getItem("message_list") || [];
+        setMessages(JSON.parse(cachedLists));
+    }
+
 
     useEffect(() => {
         // Controls the text in top title bar
@@ -59,6 +88,7 @@ const Chat = ({ db, route, navigation }) => {
             <GiftedChat
                 messages={messages}
                 renderBubble={renderBubble}
+                renderInputToolbar={renderInputToolbar}
                 onSend={messages => onSend(messages)}
                 user={{
                     _id: userID,
